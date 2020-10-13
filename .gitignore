@@ -1,4 +1,4 @@
-# Cache, session files and logs (Symfony3)
+# Cache, session files and logs
 /var/cache/*
 /var/logs/*
 /var/sessions/*
@@ -6,7 +6,7 @@
 !var/logs/.gitkeep
 !var/sessions/.gitkeep
 
-# Logs (Symfony4)
+# Logs
 /var/log/*
 !var/log/.gitkeep
 
