@@ -26,3 +26,16 @@ composer install
   - user:developer - Developer position
   - user:manager - - Manager position
   - user:tester - - - - Tester position
+
+
+### Command Example:
+* php bin/console can:developer writeCode
+  * true
+* php bin/console can:developer draw
+  * false
+* php bin/console can:designer draw
+  * true
+* php bin/console can:manager communicationWithManager
+  * false
+* php bin/console can:tester communicationWithManager
+  * true
