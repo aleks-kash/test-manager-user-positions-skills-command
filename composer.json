@@ -1,0 +1,15 @@
+{
+    "autoload": {
+        "classmap": ["src"],
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.2",
+        "symfony/console": "~4.5",
+        "symfony/config": "~4.5",
+        "symfony/dependency-injection": "~4.5",
+        "symfony/yaml": "~4.5"
+    }
+}

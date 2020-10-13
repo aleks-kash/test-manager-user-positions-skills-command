@@ -1,0 +1,25 @@
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+  # makes classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  App\:
+    resource: '../src/*'
+    exclude: '../src/{DependencyInjection,Kernel.php}'
+
+  position.skills.command.service:
+    class: \App\Service\PositionSkillsCommandService
+    arguments:
+      $provider: "@Position.skills.provider"
+
+  position.skills.provider:
+    class: \App\Provider\PositionSkillsProvider
+    arguments:
+      positions:
+        developer: ['write code', 'test code', 'communication with manager']
+        designer: ['draw', 'communication with manager']
+        tester: ['test code', 'communication with manager', 'set tasks']
+        manager: ['set tasks']

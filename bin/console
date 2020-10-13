@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$kernel = new \App\Kernel('prod');
+$application = new \App\Application($kernel);
+$application->run();
