@@ -2,11 +2,9 @@
 
 namespace App\Provider;
 
-use App\Model\Attributes\IndexKeyAttribute;
-use App\Model\Attributes\NameAttribute;
-use App\Model\Attributes\SkillsAttribute;
-use App\Model\Interfaces\SkillInterfaces;
-use App\Model\Interfaces\PositionInterfaces;
+use App\Entity\UserPosition;
+use App\Entity\UserPositionSkill;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class PositionSkillsProvider
@@ -15,7 +13,10 @@ use App\Model\Interfaces\PositionInterfaces;
  */
 class PositionSkillsProvider
 {
-    private $positions = [];
+    /**
+     * @var ArrayCollection
+     */
+    private $userPositions;
 
     /**
      * PositionSkillsProvider constructor.
@@ -24,7 +25,16 @@ class PositionSkillsProvider
      */
     public function __construct(array $positions)
     {
+        $this->userPositions = new ArrayCollection();
         $this->makePositions($positions);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getUserPositions(): ArrayCollection
+    {
+        return $this->userPositions;
     }
 
     /**
@@ -32,60 +42,69 @@ class PositionSkillsProvider
      */
     private function makePositions(array $positionSkills): void
     {
+        foreach ($positionSkills as $positionName => $skills) {
 
-        array_walk($positionSkills,function(&$value, $indexPositionName) {
+            $userPosition = $this->prepareUserPosition($positionName);
 
-            $position = new class($indexPositionName) implements PositionInterfaces {
-                use IndexKeyAttribute;
-                use NameAttribute;
-                use SkillsAttribute;
-
-                public function __construct(string $indexPositionName)
-                {
-                    $this
-                        ->setIndexKey($indexPositionName)
-                        ->setName($indexPositionName)
-                    ;
-                }
-            };
-
-            foreach ($value as $skillName) {
-                $position->addSkill(new class($skillName) implements SkillInterfaces {
-                    use IndexKeyAttribute;
-                    use NameAttribute;
-
-                    public function __construct(string $skillName)
-                    {
-                        $this
-                            ->setIndexKey($skillName)
-                            ->setName($skillName)
-                        ;
-                    }
-                });
+            foreach ($skills as $skillName) {
+                $userPositionSkill = $this->prepareUserPositionSkill($skillName);
+                $userPosition->addSkill($userPositionSkill);
             }
 
-            $value = $position;
-
-        });
-
-        $this->positions = $positionSkills;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function getPositions(): ? array
-    {
-        return $this->positions;
+            $this->userPositions->add($userPosition);
+        }
     }
 
     /**
      * @param string $positionName
      *
-     * @return PositionInterfaces|null
+     * @return UserPosition
      */
-    public function getPosition(string $positionName): ? PositionInterfaces
+    private function prepareUserPosition(string $positionName): ? UserPosition
     {
-        return @$this->positions[$positionName];
+        $userPosition = new UserPosition();
+        $userPosition
+            ->setIndexKey($this->prepareIndexKey($positionName))
+            ->setName($positionName)
+        ;
+
+        return $userPosition;
+    }
+
+    /**
+     * @param string $skillName
+     *
+     * @return UserPositionSkill
+     */
+    private function prepareUserPositionSkill(string $skillName): UserPositionSkill
+    {
+        static $skill = [];
+
+        $indexKey = $this->prepareIndexKey($skillName);
+
+        if (isset($skill[$indexKey])) {
+            return $skill[$indexKey];
+        }
+
+        $userPositionSkill = new UserPositionSkill();
+        $userPositionSkill
+            ->setIndexKey($indexKey)
+            ->setName($skillName)
+        ;
+
+        return $userPositionSkill;
+    }
+
+    /**
+     * @param string $indexKey
+     *
+     * @return string
+     */
+    private function prepareIndexKey(string $indexKey): string
+    {
+        $indexKey = ucwords($indexKey,' ');
+        $indexKey = lcfirst($indexKey);
+
+        return str_replace(' ', '', $indexKey);
     }
 }

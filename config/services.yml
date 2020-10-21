@@ -13,7 +13,7 @@ services:
   position.skills.command.service:
     class: \App\Service\PositionSkillsCommandService
     arguments:
-      $provider: "@Position.skills.provider"
+      $provider: "@position.skills.provider"
 
   position.skills.provider:
     class: \App\Provider\PositionSkillsProvider

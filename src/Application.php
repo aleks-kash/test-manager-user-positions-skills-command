@@ -68,11 +68,11 @@ class Application extends ConsoleApplication
             }
         }
 
-        /** @var PositionSkillsCommandService $PositionSkillsCommand */
-        $PositionSkillsCommand = self::$container->get('Position.skills.command.service');
+        /** @var PositionSkillsCommandService $positionSkillsCommand */
+        $positionSkillsCommand = self::$container->get('position.skills.command.service');
 
         /** @var array $commands */
-        if ($commands = $PositionSkillsCommand->makeCommands()) {
+        if ($commands = $positionSkillsCommand->makeCommands()) {
             foreach ($commands as $command) {
                 $this->add($command);
             }

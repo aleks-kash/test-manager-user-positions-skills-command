@@ -39,3 +39,5 @@ composer install
   * false
 * php bin/console can:tester communicationWithManager
   * true
+
+###### v2.0
