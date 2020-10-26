@@ -2,7 +2,8 @@
 
 namespace App\Service;
 
-use App\Command\UserPositionSkillsCommand as Command;
+use App\Command\PositionCanCommand;
+use App\Command\PositionInfoCommand;
 use App\Entity\UserPosition;
 use App\Provider\PositionSkillsProvider;
 
@@ -31,15 +32,15 @@ class PositionSkillsCommandService
     /**
      * @return array|null
      */
-    public function makeCommands(): ? array
+    public function addCommands(): ? array
     {
         $commands = [];
 
         /** @var UserPosition $userPosition */
         foreach ($this->provider->getUserPositions() as $userPosition) {
 
-            $commands[] = new Command($userPosition, Command::INFO_POSITION_MOD);
-            $commands[] = new Command($userPosition, Command::CAN_POSITION_MOD);
+            $commands[] = new PositionInfoCommand($userPosition);
+            $commands[] = new PositionCanCommand($userPosition);
         }
         return $commands;
     }

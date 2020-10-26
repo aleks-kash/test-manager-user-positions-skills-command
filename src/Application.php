@@ -72,7 +72,7 @@ class Application extends ConsoleApplication
         $positionSkillsCommand = self::$container->get('position.skills.command.service');
 
         /** @var array $commands */
-        if ($commands = $positionSkillsCommand->makeCommands()) {
+        if ($commands = $positionSkillsCommand->addCommands()) {
             foreach ($commands as $command) {
                 $this->add($command);
             }
@@ -95,15 +95,5 @@ class Application extends ConsoleApplication
         }
 
         return parent::doRunCommand($command, $input, $output);
-    }
-
-    /**
-     * @param string $parameter
-     *
-     * @return mixed
-     */
-    static public function getConfigParameter(string $parameter)
-    {
-        return self::$container->getParameter($parameter);
     }
 }
